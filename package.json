@@ -1,0 +1,14 @@
+{
+  "name": "rietumu-qa-homework",
+  "version": "1.0.0",
+  "description": "Automation tests (API + UI) for Rietumu Bank — E-Link/E-Link PRO API tests and Loan Calculator UI tests. Built with Playwright.",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.3"
+  }
+}
