@@ -30,6 +30,15 @@ test.describe('Loan Calculate tests', () => {
    
   
   });
+  test('Navigate to Mortgage in Latvia from homepage', async ({ page }) => {
+  await page.goto('https://www.rietumu.com/en');
+  await page.getByText('Accept all').click();
+  await page.getByRole('link', { name: 'Private' }).first().click();
+  await page.getByRole('link', { name: 'Lending' }).first().hover(); // or click, depends on the menu
+  await page.getByRole('link', { name: 'Mortgage in Latvia' }).click(); //??
+  await expect(page).toHaveURL(/funding-latvia/);
+  await expect(new LoanCalculatePage(page).fieldBorrow).toBeVisible();
+});
  
   })
   ;
