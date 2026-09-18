@@ -7,6 +7,7 @@ export class LoanCalculatePage {
   readonly fieldPeriodMonths: Locator;
   readonly annualInterestRate: Locator;
   readonly buttonShowTable: Locator;
+  readonly scheduleTable: Locator;
   
 
    constructor(private readonly page: Page) {
@@ -16,7 +17,8 @@ export class LoanCalculatePage {
 
     this.fieldPeriodMonths = page.locator('#period');
     this.annualInterestRate = page.locator('#rate');
-    this.buttonShowTable = page.getByText('Show Detailed Repayment Schedul');
+    this.buttonShowTable = page.locator('#show_table');
+    this.scheduleTable = page.locator('#grafiktitle')
    
   }
 
