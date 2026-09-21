@@ -1,6 +1,9 @@
 import { Page, Locator , expect} from '@playwright/test';
 
 export class LoanCalculatePage {
+  readonly page: Page;
+
+  //Локаторы
   readonly buttonAcceptAll: Locator;
   readonly fieldBorrow: Locator;
   readonly fieldPeriodYear: Locator;
@@ -13,7 +16,8 @@ export class LoanCalculatePage {
   readonly monthlyRepayment: Locator;
   
 
-   constructor(private readonly page: Page) {
+   constructor(page: Page) {
+    this.page = page;
     this.buttonAcceptAll = page.getByText('Accept all');
     this.fieldBorrow = page.locator('#summa');
     this.fieldPeriodYear = page.locator('#period1');
@@ -38,22 +42,56 @@ export class LoanCalculatePage {
   await this.buttonAcceptAll.click();
   }
 
-  async fillCalculator(c: { amount: string; years: string; months: string; rate: string; type: string }) {
-  await this.fieldBorrow.fill(c.amount);
-  await this.fieldPeriodYear.fill(c.years);
-  await this.fieldPeriodMonths.fill(c.months);
-  await this.annualInterestRate.fill(c.rate);
-  await this.annualInterestRate.press('Tab');
-   await this.page
-    .locator(`input[name="type"][value="${c.type === 'Equal' ? 2 : 1}"]`)
-.click();
-}
+  
+   //Заполняет калькулятор и выбирает тип погашения
+   
+  async fillCalculator(params: {
+    amount: string;
+    years: string;
+    months: string;
+    rate: string;
+    type: 'Variable' | 'Equal';
+  }): Promise<void> {
+    await this.fieldBorrow.fill(params.amount);
+    await this.fieldPeriodYear.fill(params.years);
+    await this.fieldPeriodMonths.fill(params.months);
+    await this.annualInterestRate.fill(params.rate);
+    await this.annualInterestRate.press('Tab');
 
-async getMonthlyRepayment(): Promise<number> {
-  await expect(this.monthlyRepayment).toContainText(/\d+\.\d{2}/);   // ждём, пока появится число
-  const text = (await this.monthlyRepayment.innerText()).replace(/\s/g, '');
-  const match = text.match(/\d+\.\d+/);
-  if (!match) throw new Error(`No number in Monthly Repayment: "${text}"`);
-  return parseFloat(match[0]);
-}
+    if (params.type === 'Equal') {
+      await this.radioEqual.click();
+    } else {
+      await this.radioVariable.click();
+    }
+  }
+
+  async switchToEqual(): Promise<void> {
+    await this.radioEqual.click();
+  }
+
+  async switchToVariable(): Promise<void> {
+    await this.radioVariable.click();
+  }
+
+  async openSchedule(): Promise<void> {
+    await this.buttonShowTable.click();
+    await expect(this.scheduleTable).toBeVisible();
+  }
+
+  //Возвращает числовое значение Monthly Repayment
+   
+  async getMonthlyRepayment(): Promise<number> {
+    await expect(this.monthlyRepayment).toContainText(/\d+[\.,]\d{2}/);
+
+    const text = (await this.monthlyRepayment.innerText())
+      .replace(/\s/g, '')
+      .replace(',', '.');
+
+    const match = text.match(/(\d+\.\d+)/);
+    if (!match) {
+      throw new Error(`No number found in Monthly Repayment: "${text}"`);
+    }
+
+    return parseFloat(match[1]);
+  }
 }

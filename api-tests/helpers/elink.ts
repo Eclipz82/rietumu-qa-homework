@@ -1,15 +1,20 @@
 import { APIRequestContext } from '@playwright/test';
+import { env } from './env';
 
 // ---------- Константы песочницы E-Link (из описания в задании) ----------
 
-export const ENDPOINT = 'https://test-elink.rietumu.lv/TCatBox/elink/process.json'; // Адрес API E-Link (JSON-версия)
-export const RID = '068774'; // Rietumu ID клиента; обязательный параметр в запросах E-Link
+export const ENDPOINT = env('ELINK_URL'); // Адрес API E-Link (JSON-версия)
+export const RID = env('ELINK_RID'); // Rietumu ID клиента; обязательный параметр в запросах E-Link
 
-export const ACTIVE_TICKET = 'bbfec84137a0d763ee10a401db1ccfba8440dce7aa4f54fc606996cab28b1b62'; // Электронный пропуск (ticket): активный, с ним запросы проходят успешно
-export const INACTIVE_TICKET = 'eeeec84137a0d763ee10a401db1ccfba8440dce7aa4f54fc606996cab28b1b62'; // Неактивный ticket: нужен для негативных тестов (ожидаем ошибку)
+export const ACTIVE_TICKET = env('ELINK_ACTIVE_TICKET'); // Электронный пропуск (ticket): активный, с ним запросы проходят успешно
+export const INACTIVE_TICKET = env('ELINK_INACTIVE_TICKET'); // Неактивный ticket: нужен для негативных тестов (ожидаем ошибку)
 export const REFNO = 'HVEF06159900001'; // Референс платежа из ответа Transactions; нужен для OutgoingPaymentDetails
-export const AUTH = { username: '068774', password: '068774', send: 'always' as const };  // Данные для Basic Auth (логин и пароль из описания песочницы). send: 'always' — отправлять заголовок Authorization сразу, а не после ответа 401.
-                                                                                          // as const — чтобы TypeScript считал значение литералом 'always', а не просто строкой.
+export const AUTH = {
+  username: env('ELINK_LOGIN'),
+  password: env('ELINK_PASSWORD'),
+  send: 'always' as const,
+};  // Данные для Basic Auth (логин и пароль из описания песочницы). send: 'always' — отправлять заголовок Authorization сразу, а не после ответа 401.
+    // as const — чтобы TypeScript считал значение литералом 'always', а не просто строкой.
 // ---------- Тип параметров запроса ----------
 // Набор пар «имя параметра → значение».
 // Значение может быть undefined: так в тесте можно «убрать» параметр из запроса.
