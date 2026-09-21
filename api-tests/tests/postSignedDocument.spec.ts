@@ -27,7 +27,7 @@ const validParams = (refNo: string, doc: string, overrides: Params = {}): Params
 });
 
 test.describe('ELink PRO: PostSignedDocument', () => {
-  test('подписанный документ принимается банком', async ({ request }) => {
+  test('Signed document bank accept', async ({ request }) => { //подписанный документ принимается банком
     const refNo = await registerPayment(request);
     const signed = signXml(await getDocForSign(request, refNo), CERT.pfxPath, CERT.passphrase);
 
@@ -41,7 +41,7 @@ test.describe('ELink PRO: PostSignedDocument', () => {
     expect(body.refNo.trim()).toBe(refNo);
   });
 
-test('документ без подписи отклоняется', async ({ request }) => {
+test('Document without sign is diclined', async ({ request }) => { //документ без подписи отклоняется
   const refNo = await registerPayment(request);
   const unsigned = await getDocForSign(request, refNo);
 
@@ -51,7 +51,7 @@ test('документ без подписи отклоняется', async ({ r
   expect(body.error).toBe('doc');
 });
 
-  test('документ, изменённый после подписи, отклоняется', async ({ request }) => {
+  test('Document which chenged after signing, is declined', async ({ request }) => { // документ, изменённый после подписи, отклоняется
     const refNo = await registerPayment(request);
     const signed = signXml(await getDocForSign(request, refNo), CERT.pfxPath, CERT.passphrase);
     const tampered = signed.replace('<Amount>100.00</Amount>', '<Amount>999.00</Amount>');
@@ -64,13 +64,13 @@ test('документ без подписи отклоняется', async ({ r
     expect(body.error_code).toBe('IERR_SIG_BAD');
   });
 
-  test('без refNo возвращается code 4', async ({ request }) => {
+  test('Without refNo returns code 4', async ({ request }) => { //без refNo возвращается code 4
     const { body } = await callElinkPro(request, validParams('', '<RBdocument/>', { refNo: undefined }));
 
     expect(body.code).toBe(4);
   });
 
-  test('без doc возвращается code 4', async ({ request }) => {
+  test('Without doc returns code 4', async ({ request }) => { //без doc возвращается code 4
     const refNo = await registerPayment(request);
 
     const { body } = await callElinkPro(request, validParams(refNo, '', { doc: undefined }));
@@ -78,7 +78,7 @@ test('документ без подписи отклоняется', async ({ r
     expect(body.code).toBe(4);
   });
 
-  test('неактивный ticket возвращает code 6', async ({ request }) => {
+  test('Inactive ticket returns code 6', async ({ request }) => { //неактивный ticket возвращает code 6
     const refNo = await registerPayment(request);
     const signed = signXml(await getDocForSign(request, refNo), CERT.pfxPath, CERT.passphrase);
 

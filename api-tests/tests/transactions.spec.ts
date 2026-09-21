@@ -3,7 +3,7 @@ import {
   AUTH, ACTIVE_TICKET, INACTIVE_TICKET, callElink, Params,ENDPOINT
 } from '../helpers/elink';
 
-
+// Период, в который лежат тестовые данные (2015-06-15)
 const validParams = (overrides: Params = {}): Params => ({
   function: 'Transactions',
   rid: '068774',
@@ -22,7 +22,7 @@ test.describe('ELink: Transactions', () => {
   test('Successful request returns a list of transactions.', async ({ request }) => { //успешный запрос возвращает список транзакций
     const { status, body } = await callElink(request, validParams());
 
-    expect(status).toBe(200);
+    expect(status).toBe(200);  
     expect(body.code).toBe(0);
     expect(body.error).toBe('');
     expect(body.transactions.length).toBeGreaterThan(0);
@@ -66,7 +66,7 @@ test.describe('ELink: Transactions', () => {
 
   test('Incorrect password returns 401', async ({ playwright }) => { // неверный пароль возвращает 401
     const ctx = await playwright.request.newContext({
-      httpCredentials: { username: '068774', password: 'wrong', send: 'always' },
+      httpCredentials: { username: '068774', password: 'wrong', send: 'always' }, // неверный пароль 'wrong'
     });
     const res = await ctx.post(ENDPOINT, { form: validParams() as Record<string, string> });
 

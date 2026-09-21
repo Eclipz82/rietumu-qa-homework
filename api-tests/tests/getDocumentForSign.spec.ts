@@ -14,7 +14,7 @@ const validParams = (refNo: string, overrides: Params = {}): Params => ({
 });
 
 test.describe('ELink PRO: GetDocumentForSign', () => {
-  test('возвращает зарегистрированный документ для подписи', async ({ request }) => {
+  test('Returns registred document for the signing', async ({ request }) => { //возвращает зарегистрированный документ для подписи
     const refNo = await registerPayment(request);
 
     const { status, body } = await callElinkPro(request, validParams(refNo));
@@ -31,7 +31,7 @@ test.describe('ELink PRO: GetDocumentForSign', () => {
   expect(body.existingSignatures).toEqual([]);
   });
 
-  test('документ содержит данные отправленного платежа', async ({ request }) => {
+  test('Document contains the data of the submitted payment', async ({ request }) => { //документ содержит данные отправленного платежа
     const refNo = await registerPayment(request, {
       Amount: '123.45',
       BenAddr1: 'ACME TEST LTD',
@@ -44,20 +44,20 @@ test.describe('ELink PRO: GetDocumentForSign', () => {
   expect(body.doc).toContain('<Ccy>EUR</Ccy>');
   });
 
-  test('без refNo возвращается code 4', async ({ request }) => {
+  test('Without refNo returns code 4', async ({ request }) => { //без refNo возвращается code 4
     const { body } = await callElinkPro(request, validParams('', { refNo: undefined }));
 
     expect(body.code).toBe(4);
   });
 
-  test('несуществующий refNo возвращает ошибку', async ({ request }) => {
+  test('Not existed refNo returns error', async ({ request }) => { //несуществующий refNo возвращает ошибку
     const { body } = await callElinkPro(request, validParams('NOSUCHREF0000'));
 
     expect(body.code).not.toBe(0);
     expect(body.doc).toBeUndefined();
   });
 
-  test('неактивный ticket возвращает code 6', async ({ request }) => {
+  test('Innactive ticket returns code 6', async ({ request }) => { //неактивный ticket возвращает code 6
     const refNo = await registerPayment(request);
 
     const { body } = await callElinkPro(request, validParams(refNo, { ticket: INACTIVE_TICKET }));

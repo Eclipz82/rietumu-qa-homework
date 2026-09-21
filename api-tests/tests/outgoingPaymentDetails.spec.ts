@@ -24,17 +24,17 @@ test.describe('ELink: OutgoingPaymentDetails', () => {
     expect(body.details.ref_no).toBe(REFNO);
   });
 
-  test('Payment deatails have expected fields ', async ({ request }) => { //детали содержат ожидаемые поля
+  test('Payment details have expected fields ', async ({ request }) => { //детали содержат ожидаемые поля
     const { body } = await callElink(request, validParams());
-    const d = body.details;
+    const details = body.details;
 
-    expect(typeof d.ref_no).toBe('string');
-    expect(d.reg_date).toMatch(/^\d{4}-\d{2}-\d{2}T/);
-    expect(typeof d.rem_name).toBe('string');
-    expect(typeof d.rem_acc).toBe('string');
-    expect(typeof d.pmnt_amount).toBe('number');
-    expect(d.pmnt_ccy).toMatch(/^[A-Z]{3}$/);
-    expect(typeof d.bbank_name).toBe('string');
+    expect(typeof details.ref_no).toBe('string');
+    expect(details.reg_date).toMatch(/^\d{4}-\d{2}-\d{2}T/); //reg_date должен соответствовать формату даты 
+    expect(typeof details.rem_name).toBe('string');
+    expect(typeof details.rem_acc).toBe('string');
+    expect(typeof details.pmnt_amount).toBe('number');
+    expect(details.pmnt_ccy).toMatch(/^[A-Z]{3}$/);    // pmnt_ccy должен быть трёхбуквенным кодом валюты в верхнем регистре
+    expect(typeof details.bbank_name).toBe('string');
   });
 
   test('The details match the transaction from the Transactions section.', async ({ request }) => { //детали совпадают с транзакцией из Transactions
