@@ -46,7 +46,7 @@ export class LoanCalculatePage {
   await this.annualInterestRate.press('Tab');
    await this.page
     .locator(`input[name="type"][value="${c.type === 'Equal' ? 2 : 1}"]`)
-    .click();
+.click();
 }
 
 async getMonthlyRepayment(): Promise<number> {
