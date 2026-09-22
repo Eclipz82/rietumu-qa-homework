@@ -132,37 +132,21 @@ Target: Loan Calculator on https://www.rietumu.com/en/person/funding/funding-lat
 npx playwright test --project=ui
 ```
 
-### Structure
+Loan Calculator: https://www.rietumu.com/en/person/funding/funding-latvia
 
-- `ui-tests/pages/loanCalculatorPage.ts`: page object `LoanCalculatePage`
-  - locators for the calculator fields (`#summa`, `#period1`, `#period`, `#rate`), repayment type radios,
-    the "Monthly Repayment" row, the "Show table" button and the schedule table
-  - `goto()`, `acceptCookies()`, `fillCalculator({...})`
-  - `getMonthlyRepayment()`: waits until a number appears in the result row and parses it,
-    so tests do not depend on fixed timeouts
-- `ui-tests/tests/loanCalculator.spec.ts`: test scenarios
+| Test                                            | Tests |
+|--------------------------------------------------|-------|
+| Navigation, UI elements, schedule table          | 3     |
+| Monthly repayment calculation (Equal / Variable) | 3     |
+| Switching repayment schedule recalculates result | 1     |
 
 ### What is covered
 
-| Test | Description |
-|------|-------------|
-| Navigation | From the home page: Private → Lending → Mortgage in Latvia; URL and the calculator are displayed |
-| UI elements | Amount, period (years / months) and interest rate fields are visible; by default **Variable** is checked, **Equal** is not |
-| Switching repayment type | Variable → Equal → Variable recalculates the monthly repayment |
-| Repayment schedule | "Show table" opens the schedule table |
-| Monthly repayment (data-driven, 3 cases) | Calculated value for several combinations of period and repayment type |
-
-Data-driven cases (amount 200000, rate 5%):
-
-| Period | Type | Expected monthly repayment |
-|--------|------|----------------------------|
-| 15 y 0 m | Equal | 1581.59 |
-| 10 y 0 m | Equal | 2121.31 |
-| 15 y 0 m | Variable | 1944.44 (first payment) |
-
-Expected values are computed with the standard formulas: for the variable type the first payment
-is `amount / months + amount * rate / 12`; for the equal type it is the annuity payment. Amounts are
-compared with `toBeCloseTo(expected, 1)` (tolerance 0.05) to avoid failures from rounding.
+- navigation from homepage: Private -> Lending -> Mortgage in Latvia
+- calculator fields and Variable/Equal radio buttons are visible
+- repayment schedule table opens
+- monthly repayment for Equal schedule (annuity formula) and Variable schedule (first payment)
+- switching Variable <-> Equal recalculates the result
 
 ### Design notes
 
