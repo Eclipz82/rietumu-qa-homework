@@ -45,7 +45,7 @@ test.describe('Loan Calculate tests', () => {
     await loanCalculatePage.switchToEqual();
     await expect.poll(() => loanCalculatePage.getMonthlyRepayment()).toBeCloseTo(1581.59, 1);
 
-    // обратно на Variable → 1044.44
+    // обратно на Variable → 1944.44
     await loanCalculatePage.switchToVariable();
     await expect.poll(() => loanCalculatePage.getMonthlyRepayment()).toBeCloseTo(1944.44, 1);
   });
