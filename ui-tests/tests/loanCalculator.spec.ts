@@ -14,48 +14,48 @@ test.describe('Loan Calculate tests', () => {
   });
 
   test('Loan Calculate page UI elements visible', async ({ page }) => {
-    const calc = new LoanCalculatePage(page);
-    await calc.goto();
-    await calc.acceptCookies();
+    const loanCalculatePage = new LoanCalculatePage(page);
+    await loanCalculatePage.goto();
+    await loanCalculatePage.acceptCookies();
 
-    await expect(calc.fieldBorrow).toBeVisible();
-    await expect(calc.fieldPeriodYear).toBeVisible();
-    await expect(calc.fieldPeriodMonths).toBeVisible();
-    await expect(calc.annualInterestRate).toBeVisible();
-    await expect(calc.radioEqual).toBeChecked();
-    await expect(calc.radioVariable).not.toBeChecked();
+    await expect(loanCalculatePage.fieldBorrow).toBeVisible();
+    await expect(loanCalculatePage.fieldPeriodYear).toBeVisible();
+    await expect(loanCalculatePage.fieldPeriodMonths).toBeVisible();
+    await expect(loanCalculatePage.annualInterestRate).toBeVisible();
+    await expect(loanCalculatePage.radioVariable).toBeChecked();
+    await expect(loanCalculatePage.radioEqual).not.toBeChecked();
   });
 
   test('Switching Variable <-> Equal recalculates repayment', async ({ page }) => {
-    const calc = new LoanCalculatePage(page);
-    await calc.goto();
-    await calc.acceptCookies();
+    const loanCalculatePage = new LoanCalculatePage(page);
+    await loanCalculatePage.goto();
+    await loanCalculatePage.acceptCookies();
 
     // Variable → 1044.44
-    await calc.fillCalculator({
+    await loanCalculatePage.fillCalculator({
       amount: '200000',
       years: '15',
       months: '0',
       rate: '5',
       type: 'Variable',
     });
-    await expect.poll(() => calc.getMonthlyRepayment()).toBeCloseTo(1044.44, 1);
+    await expect.poll(() => loanCalculatePage.getMonthlyRepayment()).toBeCloseTo(1944.44, 1);
 
     // Equal → 1581.59
-    await calc.switchToEqual();
-    await expect.poll(() => calc.getMonthlyRepayment()).toBeCloseTo(1581.59, 1);
+    await loanCalculatePage.switchToEqual();
+    await expect.poll(() => loanCalculatePage.getMonthlyRepayment()).toBeCloseTo(1581.59, 1);
 
     // обратно на Variable → 1044.44
-    await calc.switchToVariable();
-    await expect.poll(() => calc.getMonthlyRepayment()).toBeCloseTo(1044.44, 1);
+    await loanCalculatePage.switchToVariable();
+    await expect.poll(() => loanCalculatePage.getMonthlyRepayment()).toBeCloseTo(1944.44, 1);
   });
 
   test('Repayment schedule opens', async ({ page }) => {
-    const calc = new LoanCalculatePage(page);
-    await calc.goto();
-    await calc.acceptCookies();
+    const loanCalculatePage = new LoanCalculatePage(page);
+    await loanCalculatePage.goto();
+    await loanCalculatePage.acceptCookies();
 
-    await calc.fillCalculator({
+    await loanCalculatePage.fillCalculator({
       amount: '200000',
       years: '15',
       months: '0',
@@ -63,25 +63,25 @@ test.describe('Loan Calculate tests', () => {
       type: 'Equal',
     });
 
-    await expect(calc.buttonShowTable).toBeVisible();
-    await calc.openSchedule();
+    await expect(loanCalculatePage.buttonShowTable).toBeVisible();
+    await loanCalculatePage.openSchedule();
   });
 
   const cases = [
     { amount: '200000', years: '15', months: '0', rate: '5', type: 'Equal' as const, expected: 1581.59 },
-    { amount: '200000', years: '10', months: '0', rate: '5', type: 'Equal' as const, expected: 2061.40 },
-    { amount: '200000', years: '15', months: '0', rate: '5', type: 'Variable' as const, expected: 1044.44 },
+    { amount: '200000', years: '10', months: '0', rate: '5', type: 'Equal' as const, expected: 2121.31 },
+    { amount: '200000', years: '15', months: '0', rate: '5', type: 'Variable' as const, expected: 1944.44 },
   ];
 
   for (const c of cases) {
     test(`Monthly repayment ${c.type} / ${c.amount} / ${c.years}y / ${c.months}m / ${c.rate}%`, async ({ page }) => {
-      const calc = new LoanCalculatePage(page);
-      await calc.goto();
-      await calc.acceptCookies();
+      const loanCalculatePage = new LoanCalculatePage(page);
+      await loanCalculatePage.goto();
+      await loanCalculatePage.acceptCookies();
 
-      await calc.fillCalculator(c);
+      await loanCalculatePage.fillCalculator(c);
 
-      const actual = await calc.getMonthlyRepayment();
+      const actual = await loanCalculatePage.getMonthlyRepayment();
       expect(actual).toBeCloseTo(c.expected, 1);
     });
   }
