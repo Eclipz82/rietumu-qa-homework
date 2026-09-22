@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoanCalculatePage } from '../pages/loanCalculatorPage';
 
 test.describe('Loan Calculate tests', () => {
+  
 
   test('Navigate to Mortgage in Latvia from homepage', async ({ page }) => {
     await page.goto('https://www.rietumu.com/en/');
@@ -13,11 +14,16 @@ test.describe('Loan Calculate tests', () => {
     await expect(new LoanCalculatePage(page).fieldBorrow).toBeVisible();
   });
 
-  test('Loan Calculate page UI elements visible', async ({ page }) => {
-    const loanCalculatePage = new LoanCalculatePage(page);
-    await loanCalculatePage.goto();
-    await loanCalculatePage.acceptCookies();
+    test.describe('Calculator', () => {
+    let loanCalculatePage: LoanCalculatePage;
 
+    test.beforeEach(async ({ page }) => {
+      loanCalculatePage = new LoanCalculatePage(page);
+      await loanCalculatePage.goto();
+      await loanCalculatePage.acceptCookies();
+    });
+
+  test('Loan Calculate page UI elements visible', async ({ page }) => {
     await expect(loanCalculatePage.fieldBorrow).toBeVisible();
     await expect(loanCalculatePage.fieldPeriodYear).toBeVisible();
     await expect(loanCalculatePage.fieldPeriodMonths).toBeVisible();
@@ -27,11 +33,8 @@ test.describe('Loan Calculate tests', () => {
   });
 
   test('Switching Variable <-> Equal recalculates repayment', async ({ page }) => {
-    const loanCalculatePage = new LoanCalculatePage(page);
-    await loanCalculatePage.goto();
-    await loanCalculatePage.acceptCookies();
 
-    // Variable → 1044.44
+    // Variable → 1944.44
     await loanCalculatePage.fillCalculator({
       amount: '200000',
       years: '15',
@@ -51,10 +54,7 @@ test.describe('Loan Calculate tests', () => {
   });
 
   test('Repayment schedule opens', async ({ page }) => {
-    const loanCalculatePage = new LoanCalculatePage(page);
-    await loanCalculatePage.goto();
-    await loanCalculatePage.acceptCookies();
-
+  
     await loanCalculatePage.fillCalculator({
       amount: '200000',
       years: '15',
@@ -75,14 +75,12 @@ test.describe('Loan Calculate tests', () => {
 
   for (const c of cases) {
     test(`Monthly repayment ${c.type} / ${c.amount} / ${c.years}y / ${c.months}m / ${c.rate}%`, async ({ page }) => {
-      const loanCalculatePage = new LoanCalculatePage(page);
-      await loanCalculatePage.goto();
-      await loanCalculatePage.acceptCookies();
-
+   
       await loanCalculatePage.fillCalculator(c);
 
       const actual = await loanCalculatePage.getMonthlyRepayment();
       expect(actual).toBeCloseTo(c.expected, 1);
     });
   }
+});
 });
