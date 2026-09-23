@@ -8,7 +8,7 @@ export const RID = env('ELINK_RID'); // Rietumu ID клиента; обязат�
 
 export const ACTIVE_TICKET = env('ELINK_ACTIVE_TICKET'); // Электронный пропуск (ticket): активный, с ним запросы проходят успешно
 export const INACTIVE_TICKET = env('ELINK_INACTIVE_TICKET'); // Неактивный ticket: нужен для негативных тестов (ожидаем ошибку)
-export const REFNO = 'HVEF06159900001'; // Референс платежа из ответа Transactions; нужен для OutgoingPaymentDetails
+export const REFNO = env('ELINK_TEST_REFNO'); // Референс платежа из ответа Transactions; нужен для OutgoingPaymentDetails
 export const AUTH = {
   username: env('ELINK_LOGIN'),
   password: env('ELINK_PASSWORD'),

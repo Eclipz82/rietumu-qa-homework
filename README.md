@@ -113,17 +113,6 @@ Sandbox URLs, credentials and the certificate are the public ones from the assig
 - Credentials, tickets and the certificate path/password are read from environment variables
   (`helpers/env.ts`), not hardcoded, so the same code works against a different sandbox by only changing `.env`.
 
-## Known limitations of the sandbox / not covered
-
-- **`Transactions`:** the sandbox ignores `dateFrom` / `dateTill`. Any period returns the same two
-  transactions from 2015-06-15. The test "empty period returns an empty list" is marked `test.fixme`.
-- **`PostDocument`:** the sandbox does not validate payment content. An empty beneficiary name and a
-  non-existent currency (`XXX`) are accepted with `IERR_OK` and a `refNo` is issued. The two related
-  tests (expected: `error_level 4` and the offending field in `error_field`) are marked `test.fixme`.
-- Pagination (`trnID`, `more`) is not tested: the sandbox returns everything on one page (`more: false`).
-- ISO 20022 format is not supported in the sandbox (per the assignment), so it is not covered.
-- Authorization (wrong password → 401) is verified once, in `Transactions`, because all E-Link
-  functions share the same Basic Auth.
 
 ## UI tests
 

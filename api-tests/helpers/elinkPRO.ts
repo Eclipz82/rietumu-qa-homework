@@ -1,16 +1,17 @@
 import { APIRequestContext } from '@playwright/test';
 import { ACTIVE_TICKET } from './elink';
+import { env } from './env';
 
 
 export { ACTIVE_TICKET, INACTIVE_TICKET } from './elink';
 
-const ORIGIN_PRO = 'https://test-elinkpro.rietumu.lv';
+const ORIGIN_PRO = env('ELINKPRO_ORIGIN');
 export const ENDPOINT_PRO = `${ORIGIN_PRO}/TCatBox/elinkpro/Process`;
 
 export const CERT = {
   origin: ORIGIN_PRO,
-  pfxPath: './certs/068774.p12',
-  passphrase: '12345678',
+  pfxPath: env('ELINKPRO_CERT_PATH'),
+  passphrase: env('ELINKPRO_CERT_PASSWORD'),
 };
 
 
