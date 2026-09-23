@@ -60,21 +60,23 @@ Sandbox URLs, credentials and the certificate are the public ones from the assig
 ### What is covered
 
 **Transactions** (E-Link)
-- successful request: `code=0`, non-empty `transactions`, `more` flag
-- transaction schema (field types)
-- missing `rid` returns `code 4`, `error: "rid"`
-- inactive ticket, invalid date format
-- wrong password returns HTTP 401
+- successful request: `code=0`, non-empty `transactions`, `more` flag           
+- transaction has expected fields                                               
+- missing `rid` returns `code 4`, `error: "rid"`                          
+- inactive ticket returns error  
+- incorrect format data returns error                                  
+- wrong password returns HTTP 401                                         
+
 
 **OutgoingPaymentDetails** (E-Link)
-- successful request and response schema (`details` object)
-- details are consistent with the same payment returned by `Transactions`
-- missing `refno`, non-existent `refno`, inactive ticket
+- successful request with expected fields (`details` object)  
+- details are consistent with the same payment returned by `Transactions`       
+- missing `refno`, non-existent `refno`, inactive ticket             
 
 **PostDocument** (E-Link PRO)
 - valid payment is registered: `IERR_OK`, `refNo` issued, `signatureRequired` contains `CER`
 - missing `doc` returns `code 4`, inactive ticket returns `code 6`
-- malformed XML is rejected
+- payment with non-existent currency (XXX) is registered without error (error_level 0) — sandbox does not validate currency
 
 **GetDocumentForSign** (E-Link PRO)
 - the registered document is returned (`<RefNo>` matches, status `20` / "Waiting for signature")

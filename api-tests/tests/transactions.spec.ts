@@ -64,7 +64,7 @@ test.describe('ELink: Transactions', () => {
     expect(body.code).not.toBe(0);
   });
 
-  test('Incorrect password returns 401', async ({ playwright }) => { // неверный пароль возвращает 401
+  test('Wrong password returns 401', async ({ playwright }) => { // неверный пароль возвращает 401
     const context = await playwright.request.newContext({
       httpCredentials: { username: '068774', password: 'wrong', send: 'always' }, // неверный пароль 'wrong'
     });
