@@ -25,6 +25,10 @@ npx playwright show-report             # HTML report
 
 Single file: `npx playwright test api-tests/tests/transactions.spec.ts --project=api`
 
+CI
+
+GitHub Actions (.github/workflows/playwright.yml) runs on every push/PR to main/master: installs dependencies, creates .env from the tracked .env.example (sandbox credentials are public, from the assignment, so no repository secrets are needed), installs browsers and runs npx playwright test (both api and ui projects). The HTML report is uploaded as a build artifact.
+
 ## Project structure
 
 ```
