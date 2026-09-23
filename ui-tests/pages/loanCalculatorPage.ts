@@ -81,13 +81,13 @@ export class LoanCalculatePage {
   //Возвращает числовое значение Monthly Repayment
    
   async getMonthlyRepayment(): Promise<number> {
-    await expect(this.monthlyRepayment).toContainText(/\d+[\.,]\d{2}/);
+    await expect(this.monthlyRepayment).toContainText(/\d+[\.,]\d{2}/);  // Ждём появления текста в формате числа с 2 знаками после запятой/точки
 
     const text = (await this.monthlyRepayment.innerText())
-      .replace(/\s/g, '')
-      .replace(',', '.');
+      .replace(/\s/g, '')  // убираем все пробелы из текста
+      .replace(',', '.');  // заменяем запятую на точку (унификация разделителя)
 
-    const match = text.match(/(\d+\.\d+)/);
+    const match = text.match(/(\d+\.\d+)/); // ищем число с плавающей точкой в строке
     if (!match) {
       throw new Error(`No number found in Monthly Repayment: "${text}"`);
     }

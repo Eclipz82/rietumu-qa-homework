@@ -16,8 +16,7 @@ const validParams = (overrides: Params = {}): Params => ({
 test.describe('ELink PRO: PostDocument', () => {
   test('Valid payment is registered and returns a refNo.', async ({ request }) => { //корректный платёж регистрируется и возвращает refNo
     const { status, body } = await callElinkPro(request, validParams());
-    console.log(JSON.stringify(body, null, 2)); // на время разведки
-
+   
   expect(status).toBe(200);
   expect(body.code).toBe(0);
   expect(body.error).toBe('');
@@ -32,7 +31,7 @@ test.describe('ELink PRO: PostDocument', () => {
       request,
       validParams({ doc: buildPaymentXml({ Ccy: 'XXX' }) }),
     );
-console.log(JSON.stringify(body, null, 2));
+
     expect(body.error_level).toBe(0);
   });
 
@@ -59,7 +58,7 @@ console.log(JSON.stringify(body, null, 2));
       request,                                                                                         // По документации ожидается error_level 4 и error_field "BenAddr1".
       validParams({ doc: buildPaymentXml({ BenAddr1: '' }) }),
     );
-    console.log(JSON.stringify(body, null, 2));
+  
 
     expect(body.code).toBe(0); // документ зарегистрирован, но с ошибкой
     expect(body.error_level).toBe(4); // критическая ошибка

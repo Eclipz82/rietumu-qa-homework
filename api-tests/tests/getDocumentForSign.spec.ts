@@ -18,7 +18,7 @@ test.describe('ELink PRO: GetDocumentForSign', () => {
     const refNo = await registerPayment(request);
 
     const { status, body } = await callElinkPro(request, validParams(refNo));
-    console.log(JSON.stringify(body, null, 2)); // на время разведки
+    
 
   expect(status).toBe(200);
   expect(body.code).toBe(0);

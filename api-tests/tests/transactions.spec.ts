@@ -32,13 +32,13 @@ test.describe('ELink: Transactions', () => {
   test('Transaction has expected fields', async ({ request }) => { //транзакция содержит ожидаемые поля
     const { body } = await callElink(request, validParams());
 
-    for (const t of body.transactions) {
-      expect(typeof t.uniqueID).toBe('string');
-      expect(typeof t.trnID).toBe('string');
-      expect(t.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      expect(typeof t.amount).toBe('number');
-      expect(t.currency).toBe('EUR');
-      expect(typeof t.saldo).toBe('number');
+    for (const transaction of body.transactions) {
+      expect(typeof transaction.uniqueID).toBe('string');
+      expect(typeof transaction.trnID).toBe('string');
+      expect(transaction.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(typeof transaction.amount).toBe('number');
+      expect(transaction.currency).toBe('EUR');
+      expect(typeof transaction.saldo).toBe('number');
     }
   });
 
@@ -65,12 +65,12 @@ test.describe('ELink: Transactions', () => {
   });
 
   test('Incorrect password returns 401', async ({ playwright }) => { // неверный пароль возвращает 401
-    const ctx = await playwright.request.newContext({
+    const context = await playwright.request.newContext({
       httpCredentials: { username: '068774', password: 'wrong', send: 'always' }, // неверный пароль 'wrong'
     });
-    const res = await ctx.post(ENDPOINT, { form: validParams() as Record<string, string> });
+    const result = await context.post(ENDPOINT, { form: validParams() as Record<string, string> });
 
-    expect(res.status()).toBe(401);
-    await ctx.dispose();
+    expect(result.status()).toBe(401);
+    await context.dispose();
   });
 });
